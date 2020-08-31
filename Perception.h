@@ -1,17 +1,26 @@
 #pragma once
+#pragma pack(1)
 
 #include <fstream>
+#include <stdint.h>
 
 using namespace std;
 
 struct CPerception {
-	ifstream file;
 	struct CFile_Header {
 		char version[80];
 		char byte_order;
-		int empty_field;
-		unsigned long long toc_offset;
-		CFile_Header(CPerception* P);
+		int32_t empty_field;
+		uint64_t toc_offset;
 	};
+
+	struct CTOC_Segment {
+		int32_t entry_count;
+	};
+
+	ifstream file;
+	CFile_Header File_Header;
+	CTOC_Segment TOC_Segment;
+
 	CPerception();
 };

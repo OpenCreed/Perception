@@ -4,7 +4,6 @@
 #include "Perception.h"
 #include <iostream>
 #include <fstream>
-#include <ctype.h>
 
 int main()
 {
@@ -25,14 +24,5 @@ int main()
 CPerception::CPerception()
 {
 	file.open("D:/JBC/3D Objects/Radial_Engine.jt", ios::binary);
-	CFile_Header File_Header = CFile_Header(this);
-}
-
-CPerception::CFile_Header::CFile_Header(CPerception* P)
-{
-	P->file.read(version, sizeof(version));
-	P->file.read((char*)&byte_order, sizeof(byte_order));
-	P->file.read((char*)&empty_field, sizeof(empty_field));
-	P->file.read((char*)&toc_offset, sizeof(toc_offset));
-	cout << toc_offset;
+	file.read((char*)&File_Header, sizeof(File_Header));
 }
