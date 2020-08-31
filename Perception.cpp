@@ -4,10 +4,11 @@
 #include "Perception.h"
 #include <iostream>
 #include <fstream>
+#include <ctype.h>
 
 int main()
 {
-    CPerception P = CPerception();
+	CPerception P = CPerception();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
@@ -23,16 +24,15 @@ int main()
 
 CPerception::CPerception()
 {
-    fopen_s(&file, "D:/JBC/3D Objects/Radial_Engine.jt", "r");
-    CFile_Header File_Header = CFile_Header(this);
+	file.open("D:/JBC/3D Objects/Radial_Engine.jt", ios::binary);
+	CFile_Header File_Header = CFile_Header(this);
 }
 
 CPerception::CFile_Header::CFile_Header(CPerception* P)
 {
-    fscanf_s(P->file, "%75c", version, sizeof(version));
-    fseek(P->file, 80, 0);
-    fscanf_s(P->file, "%c", &byte_order);
-    fscanf_s(P->file, "%i", &empty_field);
-    fscanf_s(P->file, "%li", &toc_offset);
-    cout << version;
+	P->file.read(version, sizeof(version));
+	P->file.read((char*)&byte_order, sizeof(byte_order));
+	P->file.read((char*)&empty_field, sizeof(empty_field));
+	P->file.read((char*)&toc_offset, sizeof(toc_offset));
+	cout << toc_offset;
 }

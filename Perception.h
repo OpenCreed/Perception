@@ -5,13 +5,12 @@
 using namespace std;
 
 struct CPerception {
-	//fstream file;
-	FILE* file;
+	ifstream file;
 	struct CFile_Header {
-		char version[75];
+		char version[80];
 		char byte_order;
 		int empty_field;
-		unsigned int toc_offset;
+		unsigned long long toc_offset;
 		CFile_Header(CPerception* P);
 	};
 	CPerception();
