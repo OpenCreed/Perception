@@ -25,4 +25,20 @@ CPerception::CPerception()
 {
 	file.open("D:/JBC/3D Objects/Radial_Engine.jt", ios::binary);
 	file.read((char*)&File_Header, sizeof(File_Header));
+	cout << File_Header.version << endl;
+	file.seekg(File_Header.toc_offset);
+	file.read((char*)&TOC_Segment.entry_count, sizeof(TOC_Segment.entry_count));
+	TOC_Segment.toc_entry = (CTOC_Segment::CTOC_Entry*)malloc((int64_t)TOC_Segment.entry_count * sizeof(CTOC_Segment::CTOC_Entry));
+	if (TOC_Segment.toc_entry != nullptr)
+	{
+		file.read((char*)TOC_Segment.toc_entry, (int64_t)TOC_Segment.entry_count * sizeof(CTOC_Segment::CTOC_Entry));
+	}
+	cout << file.tellg() << endl << endl;
+	for (int i = 0; i < TOC_Segment.entry_count; i++)
+	{
+		cout << TOC_Segment.toc_entry[i].segment_offset<<endl;
+	}
+
+	free(TOC_Segment.toc_entry);
+	//cout << TOC_Segment.entry_count;
 }
