@@ -1,8 +1,11 @@
 #pragma once
 #pragma pack(1)
 
+#include <string>
 #include <fstream>
 #include <stdint.h>
+#include <vector> 
+#include <iostream>  
 
 using namespace std;
 
@@ -31,7 +34,7 @@ struct CPerception
 		};
 
 		int32_t entry_count;
-		CTOC_Entry* toc_entry;
+		vector<CTOC_Entry> toc_entry;
 
 		CTOC_Segment() {};
 		CTOC_Segment(CPerception*);

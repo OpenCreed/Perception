@@ -2,12 +2,11 @@
 //
 
 #include "Perception.h"
-#include <iostream>
-#include <fstream>
 
 int main()
 {
 	CPerception P = CPerception();
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
@@ -23,26 +22,9 @@ int main()
 
 CPerception::CPerception()
 {
-	file.open("D:/JBC/3D Objects/Radial_Engine.jt", ios::binary);
+	file.open("D:/JBC/3D Objects/floorjack.jt", ios::binary);
 	File_Header = CFile_Header(this);
 	TOC_Segment = CTOC_Segment(this);
-	//file.read((char*)&File_Header, sizeof(File_Header));
-	//cout << File_Header.version << endl;
-	//file.seekg(File_Header.toc_offset);
-	//file.read((char*)&TOC_Segment.entry_count, sizeof(TOC_Segment.entry_count));
-	//TOC_Segment.toc_entry = (CTOC_Segment::CTOC_Entry*)malloc((int64_t)TOC_Segment.entry_count * sizeof(CTOC_Segment::CTOC_Entry));
-	//if (TOC_Segment.toc_entry != nullptr)
-	//{
-	//	file.read((char*)TOC_Segment.toc_entry, (int64_t)TOC_Segment.entry_count * sizeof(CTOC_Segment::CTOC_Entry));
-	//}
-	//cout << file.tellg() << endl << endl;
-	//for (int i = 0; i < TOC_Segment.entry_count; i++)
-	//{
-	//	cout << TOC_Segment.toc_entry[i].segment_offset<<endl;
-	//}
-
-	//free(TOC_Segment.toc_entry);
-	//cout << TOC_Segment.entry_count;
 }
 
 CPerception::CFile_Header::CFile_Header(CPerception *P)
@@ -54,4 +36,12 @@ CPerception::CTOC_Segment::CTOC_Segment(CPerception* P)
 {
 	P->file.seekg(P->File_Header.toc_offset);
 	P->file.read((char*)&entry_count, sizeof(entry_count));
+
+	for (int i = 0; i < entry_count; i++)
+	{
+		CTOC_Entry entry;
+		P->file.read((char*)&entry, sizeof(entry));
+		entry.segment_attribute >>= 24;
+		toc_entry.push_back(entry);
+	}
 }
