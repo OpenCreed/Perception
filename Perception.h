@@ -15,6 +15,9 @@ struct CPerception
 		int32_t empty_field;
 		uint32_t toc_offset;
 		char lsg_segment_id[16]; // GUID
+
+		CFile_Header() {};
+		CFile_Header(CPerception*);
 	};
 
 	struct CTOC_Segment 
@@ -29,6 +32,9 @@ struct CPerception
 
 		int32_t entry_count;
 		CTOC_Entry* toc_entry;
+
+		CTOC_Segment() {};
+		CTOC_Segment(CPerception*);
 	};
 
 	ifstream file;
