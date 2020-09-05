@@ -25,9 +25,13 @@ CPerception::CPerception()
 	file.open("D:/JBC/3D Objects/floorjack.jt", ios::binary);
 	File_Header = CFile_Header(this);
 	TOC_Segment = CTOC_Segment(this);
+	for (auto entry = TOC_Segment.toc_entry.cbegin(); entry != TOC_Segment.toc_entry.cend(); entry++)
+	{
+		Data_Segment.push_back(CData_Segment(this, *entry));
+	}
 }
 
-CPerception::CFile_Header::CFile_Header(CPerception *P)
+CPerception::CFile_Header::CFile_Header(CPerception* P)
 {
 	P->file.read((char*)this, sizeof(*this));
 }
@@ -44,4 +48,10 @@ CPerception::CTOC_Segment::CTOC_Segment(CPerception* P)
 		entry.segment_attribute >>= 24;
 		toc_entry.push_back(entry);
 	}
+}
+
+CPerception::CData_Segment::CData_Segment(CPerception* P, CTOC_Segment::CTOC_Entry E)
+{
+	P->file.seekg(E.segment_offset);
+	P->file.read((char*)&Segment_Header, sizeof(Segment_Header));
 }
