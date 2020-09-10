@@ -7,6 +7,7 @@
 #include <vector> 
 #include <iostream>
 #include <zlib.h>
+#include "enum.h"
 
 using namespace std;
 
@@ -50,7 +51,23 @@ struct CPerception
 			int32_t segment_length;
 		};
 
+		struct CData
+		{
+			struct CLogical_Element_Header
+			{
+
+			};
+			struct CObject_Data
+			{
+
+			};
+
+			CData() {};
+			CData(CPerception*, Segment_Type);
+		};
+
 		CSegment_Header Segment_Header;
+		CData Data;
 
 		CData_Segment(CPerception*, CTOC_Segment::CTOC_Entry);
 	};

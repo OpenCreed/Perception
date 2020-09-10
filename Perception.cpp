@@ -54,4 +54,38 @@ CPerception::CData_Segment::CData_Segment(CPerception* P, CTOC_Segment::CTOC_Ent
 {
 	P->file.seekg(E.segment_offset);
 	P->file.read((char*)&Segment_Header, sizeof(Segment_Header));
+	Data = CData(P, (Segment_Type)Segment_Header.segment_type);
+}
+
+CPerception::CData_Segment::CData::CData(CPerception* P, Segment_Type type)
+{
+	switch (type)
+	{
+	case Segment_Type::Logical_SG:
+	case Segment_Type::JT_B_Rep:
+	case Segment_Type::PMI_Data:
+	case Segment_Type::Meta_Data:
+	case Segment_Type::XT_B_Rep:
+	case Segment_Type::Wireframe_Rep:
+	case Segment_Type::ULP:
+	case Segment_Type::LWPA:
+		cout << "Compressed" << endl;
+		break;
+	case Segment_Type::Shape:
+	case Segment_Type::Shape_LOD0:
+	case Segment_Type::Shape_LOD1:
+	case Segment_Type::Shape_LOD2:
+	case Segment_Type::Shape_LOD3:
+	case Segment_Type::Shape_LOD4:
+	case Segment_Type::Shape_LOD5:
+	case Segment_Type::Shape_LOD6:
+	case Segment_Type::Shape_LOD7:
+	case Segment_Type::Shape_LOD8:
+	case Segment_Type::Shape_LOD9:
+		cout << "Not Compressed" << endl;
+		break;
+	default:
+		cout << "Invaild Segment Type" << endl;
+		break;
+	}
 }

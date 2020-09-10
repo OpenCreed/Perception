@@ -1,4 +1,4 @@
-enum Segment_Type
+enum class Segment_Type
 {
 	Logical_SG = 1,
 	JT_B_Rep = 2,
