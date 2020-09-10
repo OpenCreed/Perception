@@ -23,5 +23,8 @@
     <ClInclude Include="Perception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="enum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@
 int main()
 {
 	CPerception P = CPerception();
+	cout << zlibVersion();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

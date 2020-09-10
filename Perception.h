@@ -5,7 +5,8 @@
 #include <fstream>
 #include <stdint.h>
 #include <vector> 
-#include <iostream>  
+#include <iostream>
+#include <zlib.h>
 
 using namespace std;
 
