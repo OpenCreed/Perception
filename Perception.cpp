@@ -3,6 +3,9 @@
 
 #include "Perception.h"
 
+ifstream CPerception::file;
+CPerception::CFile_Header CPerception::File_Header;
+
 int main()
 {
 	CPerception P = CPerception();
@@ -23,41 +26,41 @@ int main()
 CPerception::CPerception()
 {
 	file.open("D:/JBC/3D Objects/floorjack.jt", ios::binary);
-	File_Header = CFile_Header(this);
-	TOC_Segment = CTOC_Segment(this);
+	File_Header = CFile_Header();
+	TOC_Segment = CTOC_Segment();
 	for (auto entry = TOC_Segment.toc_entry.cbegin(); entry != TOC_Segment.toc_entry.cend(); entry++)
 	{
-		Data_Segment.push_back(CData_Segment(this, *entry));
+		Data_Segment.push_back(CData_Segment(*entry));
 	}
 }
 
-CPerception::CFile_Header::CFile_Header(CPerception* P)
+CPerception::CFile_Header::CFile_Header()
 {
-	P->file.read((char*)this, sizeof(*this));
+	file.read((char*)this, sizeof(*this));
 }
 
-CPerception::CTOC_Segment::CTOC_Segment(CPerception* P)
+CPerception::CTOC_Segment::CTOC_Segment()
 {
-	P->file.seekg(P->File_Header.toc_offset);
-	P->file.read((char*)&entry_count, sizeof(entry_count));
+	file.seekg(File_Header.toc_offset);
+	file.read((char*)&entry_count, sizeof(entry_count));
 
 	for (int i = 0; i < entry_count; i++)
 	{
 		CTOC_Entry entry;
-		P->file.read((char*)&entry, sizeof(entry));
+		file.read((char*)&entry, sizeof(entry));
 		entry.segment_attribute >>= 24;
 		toc_entry.push_back(entry);
 	}
 }
 
-CPerception::CData_Segment::CData_Segment(CPerception* P, CTOC_Segment::CTOC_Entry E)
+CPerception::CData_Segment::CData_Segment(CTOC_Segment::CTOC_Entry E)
 {
-	P->file.seekg(E.segment_offset);
-	P->file.read((char*)&Segment_Header, sizeof(Segment_Header));
-	Data = CData(P, (Segment_Type)Segment_Header.segment_type);
+	file.seekg(E.segment_offset);
+	file.read((char*)&Segment_Header, sizeof(Segment_Header));
+	Data = CData((Segment_Type)Segment_Header.segment_type);
 }
 
-CPerception::CData_Segment::CData::CData(CPerception* P, Segment_Type type)
+CPerception::CData_Segment::CData::CData(Segment_Type type)
 {
 	switch (type)
 	{

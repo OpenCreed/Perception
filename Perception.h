@@ -21,8 +21,7 @@ struct CPerception
 		int32_t toc_offset;
 		char lsg_segment_id[16]; // GUID
 
-		CFile_Header() {};
-		CFile_Header(CPerception*);
+		CFile_Header();
 	};
 
 	struct CTOC_Segment
@@ -38,8 +37,7 @@ struct CPerception
 		int32_t entry_count;
 		vector<CTOC_Entry> toc_entry;
 
-		CTOC_Segment() {};
-		CTOC_Segment(CPerception*);
+		CTOC_Segment();
 	};
 
 	struct CData_Segment
@@ -63,17 +61,17 @@ struct CPerception
 			};
 
 			CData() {};
-			CData(CPerception*, Segment_Type);
+			CData(Segment_Type);
 		};
 
 		CSegment_Header Segment_Header;
 		CData Data;
 
-		CData_Segment(CPerception*, CTOC_Segment::CTOC_Entry);
+		CData_Segment(CTOC_Segment::CTOC_Entry);
 	};
 
-	ifstream file;
-	CFile_Header File_Header;
+	static ifstream file;
+	static CFile_Header File_Header;
 	CTOC_Segment TOC_Segment;
 	vector<CData_Segment> Data_Segment;
 
