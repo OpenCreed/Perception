@@ -6,8 +6,8 @@
 #include <stdint.h>
 #include <vector> 
 #include <iostream>
-#include <zlib.h>
 #include "enum.h"
+#include <zlib.h>
 
 using namespace std;
 
