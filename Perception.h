@@ -65,7 +65,7 @@ struct CPerception
 		CData_Segment(CTOC_Segment::CTOC_Entry);
 	};
 
-	static std::ifstream file;
+	//static std::ifstream file;
 	static CFile_Header File_Header;
 	CTOC_Segment TOC_Segment;
 	std::vector<CData_Segment> Data_Segment;

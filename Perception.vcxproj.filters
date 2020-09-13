@@ -26,5 +26,8 @@
     <ClInclude Include="enum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="JT_File.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
