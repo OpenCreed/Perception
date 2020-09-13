@@ -1,7 +1,6 @@
 #pragma once
 #pragma pack(1)
 
-#include <fstream>
 #include <stdint.h>
 #include <vector>
 #include "enum.h"
@@ -65,10 +64,11 @@ struct CPerception
 		CData_Segment(CTOC_Segment::CTOC_Entry);
 	};
 
-	//static std::ifstream file;
 	static CFile_Header File_Header;
 	CTOC_Segment TOC_Segment;
 	std::vector<CData_Segment> Data_Segment;
 
 	CPerception();
 };
+
+#pragma pack(pop)

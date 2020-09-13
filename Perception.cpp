@@ -5,30 +5,17 @@
 #include "JT_File.h"
 #include <iostream>
 
-JT_File jtfile;
-//std::ifstream CPerception::file;
+static JT_File jtfile;
 CPerception::CFile_Header CPerception::File_Header;
 
 int main()
 {
-	CPerception P = CPerception();
+	CPerception Perception = CPerception();
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
 
 CPerception::CPerception()
 {
 	jtfile.open("D:/JBC/3D Objects/floorjack.jt");
-	//file.open("D:/JBC/3D Objects/floorjack.jt", std::ios::binary);
 	File_Header = CFile_Header();
 	TOC_Segment = CTOC_Segment();
 	for (auto entry = TOC_Segment.toc_entry.cbegin(); entry != TOC_Segment.toc_entry.cend(); entry++)
@@ -39,21 +26,17 @@ CPerception::CPerception()
 
 CPerception::CFile_Header::CFile_Header()
 {
-	//file.read((char*)this, sizeof(*this));
 	jtfile.read(*this);
 }
 
 CPerception::CTOC_Segment::CTOC_Segment()
 {
 	jtfile.read(entry_count, File_Header.toc_offset);
-	//file.seekg(File_Header.toc_offset);
-	//file.read((char*)&entry_count, sizeof(entry_count));
 
 	for (int i = 0; i < entry_count; i++)
 	{
 		CTOC_Entry entry;
 		jtfile.read(entry);
-		//file.read((char*)&entry, sizeof(entry));
 		entry.segment_attribute >>= 24;
 		toc_entry.push_back(entry);
 	}
@@ -62,8 +45,6 @@ CPerception::CTOC_Segment::CTOC_Segment()
 CPerception::CData_Segment::CData_Segment(CTOC_Segment::CTOC_Entry E)
 {
 	jtfile.read(Segment_Header, E.segment_offset);
-	//file.seekg(E.segment_offset);
-	//file.read((char*)&Segment_Header, sizeof(Segment_Header));
 	Data = CData((Segment_Type)Segment_Header.segment_type);
 }
 

@@ -7,7 +7,6 @@ class JT_File
 	std::ifstream file;
 
 public:
-
 	inline void open(std::string filepath)
 	{
 		file.open(filepath, std::ios::binary);
