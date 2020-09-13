@@ -2,14 +2,14 @@
 //
 
 #include "Perception.h"
+#include <iostream>
 
-ifstream CPerception::file;
+std::ifstream CPerception::file;
 CPerception::CFile_Header CPerception::File_Header;
 
 int main()
 {
 	CPerception P = CPerception();
-	cout << zlibVersion();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
@@ -25,7 +25,7 @@ int main()
 
 CPerception::CPerception()
 {
-	file.open("D:/JBC/3D Objects/floorjack.jt", ios::binary);
+	file.open("D:/JBC/3D Objects/floorjack.jt", std::ios::binary);
 	File_Header = CFile_Header();
 	TOC_Segment = CTOC_Segment();
 	for (auto entry = TOC_Segment.toc_entry.cbegin(); entry != TOC_Segment.toc_entry.cend(); entry++)
@@ -72,7 +72,7 @@ CPerception::CData_Segment::CData::CData(Segment_Type type)
 	case Segment_Type::Wireframe_Rep:
 	case Segment_Type::ULP:
 	case Segment_Type::LWPA:
-		cout << "Compressed" << endl;
+		std::cout << "Compressed" << std::endl;
 		break;
 	case Segment_Type::Shape:
 	case Segment_Type::Shape_LOD0:
@@ -85,10 +85,10 @@ CPerception::CData_Segment::CData::CData(Segment_Type type)
 	case Segment_Type::Shape_LOD7:
 	case Segment_Type::Shape_LOD8:
 	case Segment_Type::Shape_LOD9:
-		cout << "Not Compressed" << endl;
+		std::cout << "Not Compressed" << std::endl;
 		break;
 	default:
-		cout << "Invaild Segment Type" << endl;
+		std::cout << "Invaild Segment Type" << std::endl;
 		break;
 	}
 }

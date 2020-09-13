@@ -1,15 +1,10 @@
 #pragma once
 #pragma pack(1)
 
-#include <string>
 #include <fstream>
 #include <stdint.h>
-#include <vector> 
-#include <iostream>
+#include <vector>
 #include "enum.h"
-#include <zlib.h>
-
-using namespace std;
 
 struct CPerception
 {
@@ -35,7 +30,7 @@ struct CPerception
 		};
 
 		int32_t entry_count;
-		vector<CTOC_Entry> toc_entry;
+		std::vector<CTOC_Entry> toc_entry;
 
 		CTOC_Segment();
 	};
@@ -70,10 +65,10 @@ struct CPerception
 		CData_Segment(CTOC_Segment::CTOC_Entry);
 	};
 
-	static ifstream file;
+	static std::ifstream file;
 	static CFile_Header File_Header;
 	CTOC_Segment TOC_Segment;
-	vector<CData_Segment> Data_Segment;
+	std::vector<CData_Segment> Data_Segment;
 
 	CPerception();
 };

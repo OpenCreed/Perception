@@ -88,7 +88,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <DisableSpecificWarnings>26495</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\zlib-1.2.11\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -106,7 +105,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <DisableSpecificWarnings>26495</DisableSpecificWarnings>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\zlib-1.2.11\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
