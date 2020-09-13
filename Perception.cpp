@@ -60,7 +60,7 @@ CPerception::CData_Segment::CData::CData(Segment_Type type)
 	case Segment_Type::Wireframe_Rep:
 	case Segment_Type::ULP:
 	case Segment_Type::LWPA:
-		std::cout << "Compressed" << std::endl;
+		//std::cout << "Compressed" << std::endl;
 		break;
 	case Segment_Type::Shape:
 	case Segment_Type::Shape_LOD0:
@@ -73,7 +73,7 @@ CPerception::CData_Segment::CData::CData(Segment_Type type)
 	case Segment_Type::Shape_LOD7:
 	case Segment_Type::Shape_LOD8:
 	case Segment_Type::Shape_LOD9:
-		std::cout << "Not Compressed" << std::endl;
+		jtfile.read(Logical_Element_Header);
 		break;
 	default:
 		std::cout << "Invaild Segment Type" << std::endl;

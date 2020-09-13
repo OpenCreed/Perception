@@ -47,12 +47,22 @@ struct CPerception
 		{
 			struct CLogical_Element_Header
 			{
+				struct Element_Header
+				{
+					char object_type_id[16];
+					uint8_t object_base_type;
+					int32_t object_id;
+				};
 
+				int32_t element_length;
+				Element_Header Element_Header;
 			};
 			struct CObject_Data
 			{
 
 			};
+
+			CLogical_Element_Header Logical_Element_Header;
 
 			CData() {};
 			CData(Segment_Type);
