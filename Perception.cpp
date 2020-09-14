@@ -60,7 +60,12 @@ CPerception::CData_Segment::CData::CData(Segment_Type type)
 	case Segment_Type::Wireframe_Rep:
 	case Segment_Type::ULP:
 	case Segment_Type::LWPA:
-		//std::cout << "Compressed" << std::endl;
+		int32_t compression_flag;
+		int32_t compression_data_length;
+		uint8_t compression_algorithm;
+		jtfile.read(compression_flag);
+		jtfile.read(compression_data_length);
+		jtfile.read(compression_algorithm);
 		break;
 	case Segment_Type::Shape:
 	case Segment_Type::Shape_LOD0:
