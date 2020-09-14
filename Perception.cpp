@@ -26,17 +26,17 @@ CPerception::CPerception()
 
 CPerception::CFile_Header::CFile_Header()
 {
-	jtfile.read(*this);
+	jtfile.read_to(*this);
 }
 
 CPerception::CTOC_Segment::CTOC_Segment()
 {
-	jtfile.read(entry_count, File_Header.toc_offset);
+	jtfile.read_to(entry_count, File_Header.toc_offset);
 
 	for (int i = 0; i < entry_count; i++)
 	{
 		CTOC_Entry entry;
-		jtfile.read(entry);
+		jtfile.read_to(entry);
 		entry.segment_attribute >>= 24;
 		toc_entry.push_back(entry);
 	}
@@ -44,7 +44,7 @@ CPerception::CTOC_Segment::CTOC_Segment()
 
 CPerception::CData_Segment::CData_Segment(CTOC_Segment::CTOC_Entry E)
 {
-	jtfile.read(Segment_Header, E.segment_offset);
+	jtfile.read_to(Segment_Header, E.segment_offset);
 	Data = CData((Segment_Type)Segment_Header.segment_type);
 }
 
@@ -63,9 +63,9 @@ CPerception::CData_Segment::CData::CData(Segment_Type type)
 		int32_t compression_flag;
 		int32_t compression_data_length;
 		uint8_t compression_algorithm;
-		jtfile.read(compression_flag);
-		jtfile.read(compression_data_length);
-		jtfile.read(compression_algorithm);
+		jtfile.read_to(compression_flag);
+		jtfile.read_to(compression_data_length);
+		jtfile.read_to(compression_algorithm);
 		break;
 	case Segment_Type::Shape:
 	case Segment_Type::Shape_LOD0:
@@ -78,7 +78,7 @@ CPerception::CData_Segment::CData::CData(Segment_Type type)
 	case Segment_Type::Shape_LOD7:
 	case Segment_Type::Shape_LOD8:
 	case Segment_Type::Shape_LOD9:
-		jtfile.read(Logical_Element_Header);
+		jtfile.read_to(Logical_Element_Header);
 		break;
 	default:
 		std::cout << "Invaild Segment Type" << std::endl;

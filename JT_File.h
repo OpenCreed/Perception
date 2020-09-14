@@ -13,7 +13,7 @@ public:
 	}
 
 	template <typename T>
-	void read(T& object, int offset = NULL)
+	void read_to(T& object, int offset = NULL)
 	{
 		if (offset) file.seekg(offset);
 		file.read((char*)&object, sizeof(object));
