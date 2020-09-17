@@ -20,13 +20,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Perception.h">
+    <ClInclude Include="JT_File.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="enum.h">
+    <ClInclude Include="Perception.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JT_File.h">
+    <ClInclude Include="enum.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

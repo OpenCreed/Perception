@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <vector>
-#include "enum.h"
+#include "enum.hpp"
 
 struct CPerception
 {

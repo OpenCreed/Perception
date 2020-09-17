@@ -158,9 +158,9 @@
     <ClCompile Include="Perception.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="enum.h" />
-    <ClInclude Include="JT_File.h" />
-    <ClInclude Include="Perception.h" />
+    <ClInclude Include="enum.hpp" />
+    <ClInclude Include="JT_File.hpp" />
+    <ClInclude Include="Perception.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

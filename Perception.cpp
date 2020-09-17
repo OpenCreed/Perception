@@ -1,8 +1,8 @@
 // Perception.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include "Perception.h"
-#include "JT_File.h"
+#include "Perception.hpp"
+#include "JT_File.hpp"
 #include <iostream>
 
 static JT_File jtfile;
