@@ -4,11 +4,13 @@
 #include "Perception.hpp"
 #include "JT_File.hpp"
 #include <iostream>
+#include "zlib.h"
+#include <cassert>
 
 static JT_File jtfile;
 CPerception::CFile_Header CPerception::File_Header;
 
-int main()
+void main()
 {
 	CPerception Perception = CPerception();
 }
