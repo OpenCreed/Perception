@@ -16,7 +16,7 @@ void main()
 
 CPerception::CPerception()
 {
-	jtfile.open("D:/JBC/3D Objects/floorjack.jt");
+	jtfile.open("C:/Users/JBC/3D Objects/floorjack.jt");
 	File_Header = CFile_Header();
 	TOC_Segment = CTOC_Segment();
 	for (auto entry = TOC_Segment.toc_entry.cbegin(); entry != TOC_Segment.toc_entry.cend(); entry++)
@@ -67,6 +67,7 @@ CPerception::CData_Segment::CData::CData(Segment_Type type)
 		jtfile.read_to(compression_flag);
 		jtfile.read_to(compression_data_length);
 		jtfile.read_to(compression_algorithm);
+		std::cout << compression_data_length;
 		break;
 	case Segment_Type::Shape:
 	case Segment_Type::Shape_LOD0:
