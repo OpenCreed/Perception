@@ -6,31 +6,28 @@
 #include <iostream>
 #include "zlib.h"
 
-static JT_File jtfile;
-CPerception::CFile_Header CPerception::File_Header;
+JT_File jtfile;
+CFile_Header File_Header;
 
 void main()
 {
-	CPerception Perception = CPerception();
-}
-
-CPerception::CPerception()
-{
 	jtfile.open("C:/Users/JBC/3D Objects/floorjack.jt");
 	File_Header = CFile_Header();
-	TOC_Segment = CTOC_Segment();
+	CTOC_Segment TOC_Segment = CTOC_Segment();
+	std::vector<CData_Segment> Data_Segment;
 	for (auto entry = TOC_Segment.toc_entry.cbegin(); entry != TOC_Segment.toc_entry.cend(); entry++)
 	{
 		Data_Segment.push_back(CData_Segment(*entry));
 	}
+
 }
 
-CPerception::CFile_Header::CFile_Header()
+CFile_Header::CFile_Header()
 {
 	jtfile.read_to(*this);
 }
 
-CPerception::CTOC_Segment::CTOC_Segment()
+CTOC_Segment::CTOC_Segment()
 {
 	jtfile.read_to(entry_count, File_Header.toc_offset);
 
@@ -43,13 +40,13 @@ CPerception::CTOC_Segment::CTOC_Segment()
 	}
 }
 
-CPerception::CData_Segment::CData_Segment(CTOC_Segment::CTOC_Entry E)
+CData_Segment::CData_Segment(CTOC_Segment::CTOC_Entry E)
 {
 	jtfile.read_to(Segment_Header, E.segment_offset);
 	Data = CData((Segment_Type)Segment_Header.segment_type);
 }
 
-CPerception::CData_Segment::CData::CData(Segment_Type type)
+CData_Segment::CData::CData(Segment_Type type)
 {
 	switch (type)
 	{
@@ -67,7 +64,7 @@ CPerception::CData_Segment::CData::CData(Segment_Type type)
 		jtfile.read_to(compression_flag);
 		jtfile.read_to(compression_data_length);
 		jtfile.read_to(compression_algorithm);
-		std::cout << compression_data_length;
+		std::cout << compression_data_length << std::endl;
 		break;
 	case Segment_Type::Shape:
 	case Segment_Type::Shape_LOD0:
