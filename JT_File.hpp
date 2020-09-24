@@ -8,14 +8,10 @@ class JT_File
 	std::ifstream file;
 
 public:
-	JT_File()
-	{
-		file.exceptions(std::ifstream::failbit | std::ifstream::badbit | std::ifstream::eofbit);
-	}
-
-	void open(std::string filepath)
+	JT_File(std::string filepath)
 	{
 		file.open(filepath, std::ios::binary);
+		file.exceptions(std::ifstream::failbit | std::ifstream::badbit | std::ifstream::eofbit);
 	}
 
 	template <typename T>
