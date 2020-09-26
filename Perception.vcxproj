@@ -161,6 +161,7 @@
     <ClInclude Include="enum.hpp" />
     <ClInclude Include="JT_File.hpp" />
     <ClInclude Include="Perception.hpp" />
+    <ClInclude Include="Z_Lib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

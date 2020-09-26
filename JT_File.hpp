@@ -3,11 +3,10 @@
 #include <iostream>
 #include <fstream>
 
-class JT_File
+struct JT_File
 {
 	std::ifstream file;
 
-public:
 	JT_File(std::string filepath)
 	{
 		file.open(filepath, std::ios::binary);

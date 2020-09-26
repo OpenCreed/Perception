@@ -4,10 +4,11 @@
 #include "Perception.hpp"
 #include "JT_File.hpp"
 #include <iostream>
-#include "zlib.h"
+#include "Z_Lib.h"
 
 std::unique_ptr<JT_File> jtfile;
 std::unique_ptr<CFile_Header> File_Header;
+Z_Lib zlb = Z_Lib();
 
 void main()
 {
@@ -20,7 +21,6 @@ void main()
 	{
 		Data_Segment.push_back(CData_Segment(*entry));
 	}
-
 }
 
 CFile_Header::CFile_Header()
@@ -65,6 +65,7 @@ CData_Segment::CData::CData(Segment_Type type)
 		jtfile->read_to(compression_flag);
 		jtfile->read_to(compression_data_length);
 		jtfile->read_to(compression_algorithm);
+		zlb.inf(jtfile->file, compression_data_length-1);
 		std::cout << compression_data_length << std::endl;
 		break;
 	case Segment_Type::Shape:
