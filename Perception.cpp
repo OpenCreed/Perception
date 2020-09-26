@@ -49,6 +49,7 @@ CData_Segment::CData_Segment(CTOC_Segment::CTOC_Entry E)
 
 CData_Segment::CData::CData(Segment_Type type)
 {
+	int ret;
 	switch (type)
 	{
 	case Segment_Type::Logical_SG:
@@ -65,8 +66,8 @@ CData_Segment::CData::CData(Segment_Type type)
 		jtfile->read_to(compression_flag);
 		jtfile->read_to(compression_data_length);
 		jtfile->read_to(compression_algorithm);
-		zlb.inf(jtfile->file, compression_data_length-1);
-		std::cout << compression_data_length << std::endl;
+		ret = zlb.inf(jtfile->file, compression_data_length-1);
+		std::cout << ret << std::endl;
 		break;
 	case Segment_Type::Shape:
 	case Segment_Type::Shape_LOD0:

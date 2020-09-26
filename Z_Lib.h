@@ -59,6 +59,9 @@ public:
             
         } while (strm.avail_out == 0);
         delete[] in;
+
+        (void)inflateEnd(&strm);
+        return ret == Z_STREAM_END ? Z_OK : Z_DATA_ERROR;
     }
 
     void zerr(int ret)
