@@ -5,86 +5,94 @@
 #include "zlib.h"
 #include <vector>
 
-constexpr int CHUNK = 131072;
+constexpr int CHUNK = 262144;
 
 class Z_Lib
 {
-    z_stream strm;
-    int have, ret;
+	z_stream strm;
+	int have, ret;
+
+	int initForInflate()
+	{
+		strm.zalloc = Z_NULL;
+		strm.zfree = Z_NULL;
+		strm.opaque = Z_NULL;
+		strm.avail_in = 0;
+		strm.next_in = Z_NULL;
+		strm.avail_out = 0;
+		strm.next_out = Z_NULL;
+		strm.data_type = Z_BINARY;
+		return inflateInit(&strm);
+	}
 
 public:
-    int inf(std::ifstream &file, int inp_bytes)
-    {
-        Bytef* in = new Bytef[inp_bytes];
-        unsigned char out[CHUNK];
-        std::vector<unsigned char> sink;
+	int inf(std::ifstream& file, int inp_bytes)
+	{
+		/* allocate inflate state */
+		ret = initForInflate();
+		if (ret != Z_OK)
+			return ret;
 
-        file.read((char*)in, inp_bytes);
+		std::vector<Bytef> in;
+		std::vector<Bytef> out;
 
-        /* allocate inflate state */
-        strm.zalloc = Z_NULL;
-        strm.zfree = Z_NULL;
-        strm.opaque = Z_NULL;
-        strm.avail_in = 0;
-        strm.next_in = Z_NULL;
-        strm.data_type = Z_BINARY;
-        ret = inflateInit(&strm);
-       
-        strm.avail_in = inp_bytes;
-        strm.next_in = in;
-       
-        do {
-            strm.avail_out = CHUNK;
-            strm.next_out = out;
-            ret = inflate(&strm, Z_NO_FLUSH);
-            assert(ret != Z_STREAM_ERROR);  /* state not clobbered */
-            switch (ret) {
-            case Z_NEED_DICT:
-                ret = Z_DATA_ERROR;     /* and fall through */
-            case Z_DATA_ERROR:
-            case Z_MEM_ERROR:
-                (void)inflateEnd(&strm);
-                return ret;
-            }
-            have = CHUNK - strm.avail_out;
+		in.reserve(inp_bytes);
+		out.reserve(CHUNK);
 
-            /*if (fwrite(out, 1, have, dest) != have || ferror(dest)) {
-                (void)inflateEnd(&strm);
-                return Z_ERRNO;
-            }*/
-            for (int i = 0; i < have; i++)
-            {
-                sink.push_back(out[i]);
-            }
-            
-        } while (strm.avail_out == 0);
-        delete[] in;
+		file.read((char*)in.data(), inp_bytes);
 
-        (void)inflateEnd(&strm);
-        return ret == Z_STREAM_END ? Z_OK : Z_DATA_ERROR;
-    }
+		strm.avail_in = inp_bytes;
+		strm.next_in = in.data();
 
-    void zerr(int ret)
-    {
-        fputs("zpipe: ", stderr);
-        switch (ret) {
-        case Z_ERRNO:
-            if (ferror(stdin))
-                fputs("error reading stdin\n", stderr);
-            if (ferror(stdout))
-                fputs("error writing stdout\n", stderr);
-            break;
-        case Z_STREAM_ERROR:
-            fputs("invalid compression level\n", stderr);
-            break;
-        case Z_DATA_ERROR:
-            fputs("invalid or incomplete deflate data\n", stderr);
-            break;
-        case Z_MEM_ERROR:
-            fputs("out of memory\n", stderr);
-            break;
-        case Z_VERSION_ERROR:
-            fputs("zlib version mismatch!\n", stderr);
-        }
-    }
+		int out_size = 0;
+		int test = 0;
+
+		while (strm.avail_out == 0)
+		{
+			test++;
+			Bytef* chunk_out = out.data();
+			out_size += CHUNK;
+			out.reserve(out_size);
+			strm.avail_out = CHUNK;
+			strm.next_out = &chunk_out[out_size - CHUNK];
+			ret = inflate(&strm, Z_NO_FLUSH);
+			assert(ret != Z_STREAM_ERROR);
+			switch (ret)
+			{
+			case Z_NEED_DICT:
+				ret = Z_DATA_ERROR;
+			case Z_DATA_ERROR:
+			case Z_MEM_ERROR:
+				(void)inflateEnd(&strm);
+				return ret;
+			}
+		}
+		out.resize(strm.total_out);
+		(void)inflateEnd(&strm);
+		return ret == Z_STREAM_END ? Z_OK : Z_DATA_ERROR;
+	}
+
+	void zerr(int ret)
+	{
+		fputs("zpipe: ", stderr);
+		switch (ret) {
+		case Z_ERRNO:
+			if (ferror(stdin))
+				fputs("error reading stdin\n", stderr);
+			if (ferror(stdout))
+				fputs("error writing stdout\n", stderr);
+			break;
+		case Z_STREAM_ERROR:
+			fputs("invalid compression level\n", stderr);
+			break;
+		case Z_DATA_ERROR:
+			fputs("invalid or incomplete deflate data\n", stderr);
+			break;
+		case Z_MEM_ERROR:
+			fputs("out of memory\n", stderr);
+			break;
+		case Z_VERSION_ERROR:
+			fputs("zlib version mismatch!\n", stderr);
+		}
+	}
 };
