@@ -5,7 +5,7 @@
 #include "zlib.h"
 #include <vector>
 
-constexpr int CHUNK = 16384;
+constexpr int CHUNK = 131072;
 
 class Z_Lib
 {
@@ -27,8 +27,9 @@ public:
         strm.opaque = Z_NULL;
         strm.avail_in = 0;
         strm.next_in = Z_NULL;
+        strm.data_type = Z_BINARY;
         ret = inflateInit(&strm);
-
+       
         strm.avail_in = inp_bytes;
         strm.next_in = in;
        
@@ -58,5 +59,29 @@ public:
             
         } while (strm.avail_out == 0);
         delete[] in;
+    }
+
+    void zerr(int ret)
+    {
+        fputs("zpipe: ", stderr);
+        switch (ret) {
+        case Z_ERRNO:
+            if (ferror(stdin))
+                fputs("error reading stdin\n", stderr);
+            if (ferror(stdout))
+                fputs("error writing stdout\n", stderr);
+            break;
+        case Z_STREAM_ERROR:
+            fputs("invalid compression level\n", stderr);
+            break;
+        case Z_DATA_ERROR:
+            fputs("invalid or incomplete deflate data\n", stderr);
+            break;
+        case Z_MEM_ERROR:
+            fputs("out of memory\n", stderr);
+            break;
+        case Z_VERSION_ERROR:
+            fputs("zlib version mismatch!\n", stderr);
+        }
     }
 };
