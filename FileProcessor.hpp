@@ -23,7 +23,7 @@ public:
 	}
 
 	template <typename T>
-	void read_to(T& object, int offset = NULL)
+	void readTo(T& object, int offset = NULL)
 	{
 		try
 		{

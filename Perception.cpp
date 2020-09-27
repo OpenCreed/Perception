@@ -21,17 +21,17 @@ int main()
 
 FileHeader::FileHeader()
 {
-	fp->read_to(*this);
+	fp->readTo(*this);
 }
 
 TOCSegment::TOCSegment()
 {
-	fp->read_to(entryCount, fileHeader->tocOffset);
+	fp->readTo(entryCount, fileHeader->tocOffset);
 
 	for (int i = 0; i < entryCount; i++)
 	{
 		TOCEntry entry;
-		fp->read_to(entry);
+		fp->readTo(entry);
 		entry.segmentAttribute >>= 24;
 		tocEntry.push_back(entry);
 	}
@@ -39,7 +39,7 @@ TOCSegment::TOCSegment()
 
 DataSegment::DataSegment(TOCSegment::TOCEntry E)
 {
-	fp->read_to(segmentHeader, E.segmentOffset);
+	fp->readTo(segmentHeader, E.segmentOffset);
 	data = Data((SegmentType)segmentHeader.segmentType);
 }
 
@@ -58,9 +58,9 @@ DataSegment::Data::Data(SegmentType type)
 		int32_t compression_flag;
 		int32_t compression_data_length;
 		uint8_t compression_algorithm;
-		fp->read_to(compression_flag);
-		fp->read_to(compression_data_length);
-		fp->read_to(compression_algorithm);
+		fp->readTo(compression_flag);
+		fp->readTo(compression_data_length);
+		fp->readTo(compression_algorithm);
 		fp->decompressData(compression_data_length - 1);
 		break;
 	case SegmentType::Shape:
@@ -74,7 +74,7 @@ DataSegment::Data::Data(SegmentType type)
 	case SegmentType::Shape_LOD7:
 	case SegmentType::Shape_LOD8:
 	case SegmentType::Shape_LOD9:
-		fp->read_to(logicalElementHeader);
+		fp->readTo(logicalElementHeader);
 		std::cout << +logicalElementHeader.elementHeader.objectBaseType << std::endl;
 		break;
 	default:
