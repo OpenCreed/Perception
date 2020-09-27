@@ -5,15 +5,17 @@
 #include "zlib.h"
 #include <vector>
 
-constexpr int CHUNK = 262144;
+constexpr int CHUNK = 131072;
 
 class Z_Lib
 {
 	z_stream strm;
-	int have, ret;
+	std::vector<Bytef> in;
+	std::vector<Bytef> out;
 
 	int initForInflate()
 	{
+		/* allocate inflate state */
 		strm.zalloc = Z_NULL;
 		strm.zfree = Z_NULL;
 		strm.opaque = Z_NULL;
@@ -25,36 +27,34 @@ class Z_Lib
 		return inflateInit(&strm);
 	}
 
+	void clearVectorStreams()
+	{
+		in.clear();
+		out.clear();
+	}
+
 public:
 	int inf(std::ifstream& file, int inp_bytes)
 	{
-		/* allocate inflate state */
+		int ret;
+
+		clearVectorStreams();
 		ret = initForInflate();
 		if (ret != Z_OK)
 			return ret;
 
-		std::vector<Bytef> in;
-		std::vector<Bytef> out;
-
-		in.reserve(inp_bytes);
-		out.reserve(CHUNK);
+		in.resize(inp_bytes);
 
 		file.read((char*)in.data(), inp_bytes);
 
 		strm.avail_in = inp_bytes;
 		strm.next_in = in.data();
 
-		int out_size = 0;
-		int test = 0;
-
 		while (strm.avail_out == 0)
 		{
-			test++;
-			Bytef* chunk_out = out.data();
-			out_size += CHUNK;
-			out.reserve(out_size);
+			out.resize(out.size() + CHUNK);
 			strm.avail_out = CHUNK;
-			strm.next_out = &chunk_out[out_size - CHUNK];
+			strm.next_out = out.data() + out.size() - CHUNK;
 			ret = inflate(&strm, Z_NO_FLUSH);
 			assert(ret != Z_STREAM_ERROR);
 			switch (ret)
@@ -67,7 +67,9 @@ public:
 				return ret;
 			}
 		}
+
 		out.resize(strm.total_out);
+		std::cout << strm.total_out << " " << out.size()<<" ";
 		(void)inflateEnd(&strm);
 		return ret == Z_STREAM_END ? Z_OK : Z_DATA_ERROR;
 	}
