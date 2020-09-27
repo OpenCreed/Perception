@@ -9,8 +9,15 @@ struct JT_File
 
 	JT_File(std::string filepath)
 	{
-		file.open(filepath, std::ios::binary);
-		file.exceptions(std::ifstream::failbit | std::ifstream::badbit | std::ifstream::eofbit);
+		try
+		{
+			file.open(filepath, std::ios::binary);
+			file.exceptions(std::ifstream::failbit | std::ifstream::badbit | std::ifstream::eofbit);
+		}
+		catch (const std::exception& e)
+		{
+			std::cerr << e.what() << std::endl;
+		}
 	}
 
 	template <typename T>
@@ -21,14 +28,21 @@ struct JT_File
 			if (offset) file.seekg(offset);
 			file.read((char*)&object, sizeof(object));
 		}
-		catch (std::ifstream::failure e)
+		catch (std::exception& e)
 		{
-			std::cerr << e.code().message()<< std::endl;
+			std::cerr << e.what()<< std::endl;
 		}
 	}
 
 	~JT_File()
 	{
-		file.close();
+		try
+		{
+			file.close();
+		}
+		catch (const std::exception& e)
+		{
+			std::cerr << e.what() << std::endl;
+		}
 	}
 };

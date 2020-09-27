@@ -1,7 +1,6 @@
 #pragma once
 
 #include <fstream>
-#include <assert.h>
 #include "zlib.h"
 #include <vector>
 
@@ -34,67 +33,58 @@ class Z_Lib
 	}
 
 public:
-	int inf(std::ifstream& file, int inp_bytes)
+	void inf(std::ifstream& file, int inp_bytes)
 	{
 		int ret;
-
 		clearVectorStreams();
-		ret = initForInflate();
-		if (ret != Z_OK)
-			return ret;
-
-		in.resize(inp_bytes);
-
-		file.read((char*)in.data(), inp_bytes);
-
-		strm.avail_in = inp_bytes;
-		strm.next_in = in.data();
-
-		while (strm.avail_out == 0)
+		try
 		{
-			out.resize(out.size() + CHUNK);
-			strm.avail_out = CHUNK;
-			strm.next_out = out.data() + out.size() - CHUNK;
-			ret = inflate(&strm, Z_NO_FLUSH);
-			assert(ret != Z_STREAM_ERROR);
-			switch (ret)
+			ret = initForInflate();
+			if (ret != Z_OK)	throw ret;
+			in.resize(inp_bytes);
+			file.read((char*)in.data(), inp_bytes);
+			strm.avail_in = inp_bytes;
+			strm.next_in = in.data();
+			while (strm.avail_out == 0)
 			{
-			case Z_NEED_DICT:
-				ret = Z_DATA_ERROR;
-			case Z_DATA_ERROR:
-			case Z_MEM_ERROR:
-				(void)inflateEnd(&strm);
-				return ret;
+				out.resize(out.size() + CHUNK);
+				strm.avail_out = CHUNK;
+				strm.next_out = out.data() + out.size() - CHUNK;
+				ret = inflate(&strm, Z_NO_FLUSH);
+				if (ret != Z_OK && ret != Z_STREAM_END) break;
 			}
+			out.resize(strm.total_out);
+			(void)inflateEnd(&strm);
+			if (ret != Z_STREAM_END)	throw ret == Z_OK ? Z_DATA_ERROR : ret;
 		}
-
-		out.resize(strm.total_out);
-		std::cout << strm.total_out << " " << out.size()<<" ";
-		(void)inflateEnd(&strm);
-		return ret == Z_STREAM_END ? Z_OK : Z_DATA_ERROR;
+		catch (int ret)
+		{
+			zerr(ret);
+		}
+		catch (std::exception& e)
+		{
+			std::cerr << e.what();
+		}
 	}
 
 	void zerr(int ret)
 	{
-		fputs("zpipe: ", stderr);
+		std::cerr << "Z_Lib: ";
 		switch (ret) {
 		case Z_ERRNO:
-			if (ferror(stdin))
-				fputs("error reading stdin\n", stderr);
-			if (ferror(stdout))
-				fputs("error writing stdout\n", stderr);
+			std::cerr << "IO Error\n";
 			break;
 		case Z_STREAM_ERROR:
-			fputs("invalid compression level\n", stderr);
+			std::cerr << "invalid compression level\n";
 			break;
 		case Z_DATA_ERROR:
-			fputs("invalid or incomplete deflate data\n", stderr);
+			std::cerr << "invalid or incomplete deflate data\n";
 			break;
 		case Z_MEM_ERROR:
-			fputs("out of memory\n", stderr);
+			std::cerr << "out of memory\n";
 			break;
 		case Z_VERSION_ERROR:
-			fputs("zlib version mismatch!\n", stderr);
+			std::cerr << "zlib version mismatch!\n";
 		}
 	}
 };

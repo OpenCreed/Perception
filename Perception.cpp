@@ -66,8 +66,7 @@ CData_Segment::CData::CData(Segment_Type type)
 		jtfile->read_to(compression_flag);
 		jtfile->read_to(compression_data_length);
 		jtfile->read_to(compression_algorithm);
-		ret = zlb.inf(jtfile->file, compression_data_length-1);
-		std::cout << compression_data_length << " " << ret << std::endl;
+		zlb.inf(jtfile->file, compression_data_length - 1);
 		break;
 	case Segment_Type::Shape:
 	case Segment_Type::Shape_LOD0:
