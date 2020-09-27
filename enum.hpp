@@ -1,4 +1,6 @@
-enum class Segment_Type
+#pragma once
+
+enum class SegmentType
 {
 	Logical_SG = 1,
 	JT_B_Rep = 2,

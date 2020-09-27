@@ -1,12 +1,10 @@
 #pragma once
 
-#include <fstream>
-#include "zlib.h"
-#include <vector>
+#include "PCH.h"
 
 constexpr int CHUNK = 131072;
 
-class Z_Lib
+class ZLibCustom
 {
 	z_stream strm;
 	std::vector<Bytef> in;
@@ -59,7 +57,7 @@ public:
 		}
 		catch (int ret)
 		{
-			zerr(ret);
+			zLibCustomErr(ret);
 		}
 		catch (std::exception& e)
 		{
@@ -67,9 +65,9 @@ public:
 		}
 	}
 
-	void zerr(int ret)
+	void zLibCustomErr(int ret)
 	{
-		std::cerr << "Z_Lib: ";
+		std::cerr << "ZLibCustom : ";
 		switch (ret) {
 		case Z_ERRNO:
 			std::cerr << "IO Error\n";

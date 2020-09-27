@@ -1,85 +1,81 @@
 // Perception.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+#include "PCH.h"
+#include "Perception.h"
+#include "FileProcessor.hpp"
 
-#include "Perception.hpp"
-#include "JT_File.hpp"
-#include <iostream>
-#include "Z_Lib.h"
+std::unique_ptr<FileProcessor> fp;
+std::unique_ptr<FileHeader> fileHeader;
 
-std::unique_ptr<JT_File> jtfile;
-std::unique_ptr<CFile_Header> File_Header;
-Z_Lib zlb = Z_Lib();
-
-void main()
+int main()
 {
-	//jtfile.open("C:/Users/JBC/3D Objects/floorjack.jt");
-	jtfile = std::make_unique<JT_File>("C:/Users/JBC/3D Objects/floorjack.jt");
-	File_Header = std::make_unique<CFile_Header>();
-	CTOC_Segment TOC_Segment = CTOC_Segment();
-	std::vector<CData_Segment> Data_Segment;
-	for (auto entry = TOC_Segment.toc_entry.cbegin(); entry != TOC_Segment.toc_entry.cend(); entry++)
+	fp = std::make_unique<FileProcessor>("C:/Users/JBC/3D Objects/floorjack.jt");
+	fileHeader = std::make_unique<FileHeader>();
+	TOCSegment TOC_Segment = TOCSegment();
+	std::vector<DataSegment> Data_Segment;
+	for (auto entry = TOC_Segment.tocEntry.cbegin(); entry != TOC_Segment.tocEntry.cend(); entry++)
 	{
-		Data_Segment.push_back(CData_Segment(*entry));
+		Data_Segment.push_back(DataSegment(*entry));
 	}
 }
 
-CFile_Header::CFile_Header()
+FileHeader::FileHeader()
 {
-	jtfile->read_to(*this);
+	fp->read_to(*this);
 }
 
-CTOC_Segment::CTOC_Segment()
+TOCSegment::TOCSegment()
 {
-	jtfile->read_to(entry_count, File_Header->toc_offset);
+	fp->read_to(entryCount, fileHeader->tocOffset);
 
-	for (int i = 0; i < entry_count; i++)
+	for (int i = 0; i < entryCount; i++)
 	{
-		CTOC_Entry entry;
-		jtfile->read_to(entry);
-		entry.segment_attribute >>= 24;
-		toc_entry.push_back(entry);
+		TOCEntry entry;
+		fp->read_to(entry);
+		entry.segmentAttribute >>= 24;
+		tocEntry.push_back(entry);
 	}
 }
 
-CData_Segment::CData_Segment(CTOC_Segment::CTOC_Entry E)
+DataSegment::DataSegment(TOCSegment::TOCEntry E)
 {
-	jtfile->read_to(Segment_Header, E.segment_offset);
-	Data = CData((Segment_Type)Segment_Header.segment_type);
+	fp->read_to(segmentHeader, E.segmentOffset);
+	data = Data((SegmentType)segmentHeader.segmentType);
 }
 
-CData_Segment::CData::CData(Segment_Type type)
+DataSegment::Data::Data(SegmentType type)
 {
-	int ret;
 	switch (type)
 	{
-	case Segment_Type::Logical_SG:
-	case Segment_Type::JT_B_Rep:
-	case Segment_Type::PMI_Data:
-	case Segment_Type::Meta_Data:
-	case Segment_Type::XT_B_Rep:
-	case Segment_Type::Wireframe_Rep:
-	case Segment_Type::ULP:
-	case Segment_Type::LWPA:
+	case SegmentType::Logical_SG:
+	case SegmentType::JT_B_Rep:
+	case SegmentType::PMI_Data:
+	case SegmentType::Meta_Data:
+	case SegmentType::XT_B_Rep:
+	case SegmentType::Wireframe_Rep:
+	case SegmentType::ULP:
+	case SegmentType::LWPA:
 		int32_t compression_flag;
 		int32_t compression_data_length;
 		uint8_t compression_algorithm;
-		jtfile->read_to(compression_flag);
-		jtfile->read_to(compression_data_length);
-		jtfile->read_to(compression_algorithm);
-		zlb.inf(jtfile->file, compression_data_length - 1);
+		fp->read_to(compression_flag);
+		fp->read_to(compression_data_length);
+		fp->read_to(compression_algorithm);
+		fp->decompressData(compression_data_length - 1);
 		break;
-	case Segment_Type::Shape:
-	case Segment_Type::Shape_LOD0:
-	case Segment_Type::Shape_LOD1:
-	case Segment_Type::Shape_LOD2:
-	case Segment_Type::Shape_LOD3:
-	case Segment_Type::Shape_LOD4:
-	case Segment_Type::Shape_LOD5:
-	case Segment_Type::Shape_LOD6:
-	case Segment_Type::Shape_LOD7:
-	case Segment_Type::Shape_LOD8:
-	case Segment_Type::Shape_LOD9:
-		jtfile->read_to(Logical_Element_Header);
+	case SegmentType::Shape:
+	case SegmentType::Shape_LOD0:
+	case SegmentType::Shape_LOD1:
+	case SegmentType::Shape_LOD2:
+	case SegmentType::Shape_LOD3:
+	case SegmentType::Shape_LOD4:
+	case SegmentType::Shape_LOD5:
+	case SegmentType::Shape_LOD6:
+	case SegmentType::Shape_LOD7:
+	case SegmentType::Shape_LOD8:
+	case SegmentType::Shape_LOD9:
+		fp->read_to(logicalElementHeader);
+		std::cout << +logicalElementHeader.elementHeader.objectBaseType << std::endl;
 		break;
 	default:
 		std::cout << "Invaild Segment Type" << std::endl;

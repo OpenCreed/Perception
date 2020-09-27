@@ -18,18 +18,24 @@
     <ClCompile Include="Perception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="JT_File.hpp">
+    <ClInclude Include="Perception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Perception.hpp">
+    <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="enum.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Z_Lib.h">
+    <ClInclude Include="FileProcessor.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ZLibCustom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,13 +1,15 @@
 #pragma once
 
-#include <iostream>
-#include <fstream>
+#include "PCH.h"
+#include "ZLibCustom.h"
 
-struct JT_File
+class FileProcessor
 {
 	std::ifstream file;
+	ZLibCustom zlb = ZLibCustom();
 
-	JT_File(std::string filepath)
+public:
+	FileProcessor(std::string filepath)
 	{
 		try
 		{
@@ -30,11 +32,16 @@ struct JT_File
 		}
 		catch (std::exception& e)
 		{
-			std::cerr << e.what()<< std::endl;
+			std::cerr << e.what() << std::endl;
 		}
 	}
 
-	~JT_File()
+	void decompressData(int sze)
+	{
+		zlb.inf(file, sze);
+	}
+
+	~FileProcessor()
 	{
 		try
 		{
