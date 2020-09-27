@@ -163,7 +163,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="PCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -172,10 +172,10 @@
     <ClCompile Include="Perception.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PCH.h" />
+    <ClInclude Include="Perception.h" />
     <ClInclude Include="enum.hpp" />
     <ClInclude Include="FileProcessor.hpp" />
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="Perception.h" />
     <ClInclude Include="ZLibCustom.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
