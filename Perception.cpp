@@ -39,13 +39,10 @@ TOCSegment::TOCSegment()
 
 DataSegment::DataSegment(TOCSegment::TOCEntry E)
 {
-	fp->readTo(segmentHeader, E.segmentOffset);
-	data = Data((SegmentType)segmentHeader.segmentType);
-}
+	std::vector<Byte>dataBuffer;
 
-DataSegment::Data::Data(SegmentType type)
-{
-	switch (type)
+	fp->readTo(segmentHeader, E.segmentOffset);
+	switch ((SegmentType)segmentHeader.segmentType)
 	{
 	case SegmentType::Logical_SG:
 	case SegmentType::JT_B_Rep:
@@ -55,14 +52,17 @@ DataSegment::Data::Data(SegmentType type)
 	case SegmentType::Wireframe_Rep:
 	case SegmentType::ULP:
 	case SegmentType::LWPA:
-		int32_t compression_flag;
-		int32_t compression_data_length;
-		uint8_t compression_algorithm;
-		fp->readTo(compression_flag);
-		fp->readTo(compression_data_length);
-		fp->readTo(compression_algorithm);
-		fp->decompressData(compression_data_length - 1);
+	{
+		int32_t compressionFlag;
+		int32_t compressionDataLength;
+		uint8_t compressionAlgorithm;
+		fp->readTo(compressionFlag);
+		fp->readTo(compressionDataLength);
+		fp->readTo(compressionAlgorithm);
+		dataBuffer.resize(compressionDataLength - 1);
+		fp->decompressAndCopyTo(dataBuffer);
 		break;
+	}
 	case SegmentType::Shape:
 	case SegmentType::Shape_LOD0:
 	case SegmentType::Shape_LOD1:
@@ -74,11 +74,58 @@ DataSegment::Data::Data(SegmentType type)
 	case SegmentType::Shape_LOD7:
 	case SegmentType::Shape_LOD8:
 	case SegmentType::Shape_LOD9:
-		fp->readTo(logicalElementHeader);
+	{
+		//fp->readTo(logicalElementHeader);
 		//std::cout << +logicalElementHeader.elementHeader.objectBaseType << std::endl;
+		dataBuffer.resize(segmentHeader.segmentLength);
+		fp->copyTo(dataBuffer);
 		break;
+	}
 	default:
 		std::cout << "Invaild Segment Type" << std::endl;
 		break;
 	}
+
+	data = *(Data*)dataBuffer.data();
+	std::cout << +data.logicalElementHeader.elementHeader.objectBaseType << std::endl;
 }
+
+//DataSegment::Data::Data(SegmentType type)
+//{
+//	switch (type)
+//	{
+//	case SegmentType::Logical_SG:
+//	case SegmentType::JT_B_Rep:
+//	case SegmentType::PMI_Data:
+//	case SegmentType::Meta_Data:
+//	case SegmentType::XT_B_Rep:
+//	case SegmentType::Wireframe_Rep:
+//	case SegmentType::ULP:
+//	case SegmentType::LWPA:
+//		int32_t compression_flag;
+//		int32_t compression_data_length;
+//		uint8_t compression_algorithm;
+//		fp->readTo(compression_flag);
+//		fp->readTo(compression_data_length);
+//		fp->readTo(compression_algorithm);
+//		fp->decompressData(compression_data_length - 1);
+//		break;
+//	case SegmentType::Shape:
+//	case SegmentType::Shape_LOD0:
+//	case SegmentType::Shape_LOD1:
+//	case SegmentType::Shape_LOD2:
+//	case SegmentType::Shape_LOD3:
+//	case SegmentType::Shape_LOD4:
+//	case SegmentType::Shape_LOD5:
+//	case SegmentType::Shape_LOD6:
+//	case SegmentType::Shape_LOD7:
+//	case SegmentType::Shape_LOD8:
+//	case SegmentType::Shape_LOD9:
+//		fp->readTo(logicalElementHeader);
+//		//std::cout << +logicalElementHeader.elementHeader.objectBaseType << std::endl;
+//		break;
+//	default:
+//		std::cout << "Invaild Segment Type" << std::endl;
+//		break;
+//	}
+//}

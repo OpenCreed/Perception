@@ -36,9 +36,15 @@ public:
 		}
 	}
 
-	void decompressData(int sze)
+	void copyTo(std::vector<Byte> &dataBuffer)
 	{
-		zlb.inf(file, sze);
+		file.read((char*)dataBuffer.data(), dataBuffer.size());
+	}
+
+	void decompressAndCopyTo(std::vector<Byte> &dataBuffer)
+	{
+		file.read((char*)dataBuffer.data(), dataBuffer.size());
+		zlb.inf(dataBuffer);
 	}
 
 	~FileProcessor()

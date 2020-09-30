@@ -60,9 +60,6 @@ struct DataSegment
 		};
 
 		LogicalElementHeader logicalElementHeader;
-
-		Data() {};
-		Data(SegmentType);
 	};
 
 	SegmentHeader segmentHeader;

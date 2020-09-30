@@ -1,6 +1,8 @@
-﻿  Generating code
-  Previous IPDB not found, fall back to full compilation.
-  All 342 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+﻿  Perception.cpp
+  Generating code
+  100 of 345 functions (29.0%) were compiled, the rest were copied from previous compilation.
+    11 functions were new in current compilation
+    25 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 zlib.lib(adler32.obj) : warning LNK4099: PDB 'zlib.pdb' was not found with 'zlib.lib(adler32.obj)' or at 'D:\Source\Perception\Release\zlib.pdb'; linking object as if no debug info
 zlib.lib(crc32.obj) : warning LNK4099: PDB 'zlib.pdb' was not found with 'zlib.lib(crc32.obj)' or at 'D:\Source\Perception\Release\zlib.pdb'; linking object as if no debug info

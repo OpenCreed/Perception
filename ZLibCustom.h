@@ -7,8 +7,6 @@ constexpr int CHUNK = 131072;
 class ZLibCustom
 {
 	z_stream strm;
-	std::vector<Bytef> in;
-	std::vector<Bytef> out;
 
 	int initForInflate()
 	{
@@ -24,24 +22,17 @@ class ZLibCustom
 		return inflateInit(&strm);
 	}
 
-	void clearVectorStreams()
-	{
-		in.clear();
-		out.clear();
-	}
-
 public:
-	void inf(std::ifstream& file, int inp_bytes)
+	void inf(std::vector<Byte> &in)
 	{
 		int ret;
-		clearVectorStreams();
+		std::vector<Byte> out;
+
 		try
 		{
 			ret = initForInflate();
 			if (ret != Z_OK)	throw ret;
-			in.resize(inp_bytes);
-			file.read((char*)in.data(), inp_bytes);
-			strm.avail_in = inp_bytes;
+			strm.avail_in = in.size();
 			strm.next_in = in.data();
 			while (strm.avail_out == 0)
 			{
@@ -53,8 +44,8 @@ public:
 			}
 			out.resize(strm.total_out);
 			(void)inflateEnd(&strm);
-			std::cout << ret << std::endl;
 			if (ret != Z_STREAM_END)	throw ret == Z_OK ? Z_DATA_ERROR : ret;
+			in = std::move(out);
 		}
 		catch (int ret)
 		{
