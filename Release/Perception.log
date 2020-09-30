@@ -1,0 +1,11 @@
+﻿  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 342 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+zlib.lib(adler32.obj) : warning LNK4099: PDB 'zlib.pdb' was not found with 'zlib.lib(adler32.obj)' or at 'D:\Source\Perception\Release\zlib.pdb'; linking object as if no debug info
+zlib.lib(crc32.obj) : warning LNK4099: PDB 'zlib.pdb' was not found with 'zlib.lib(crc32.obj)' or at 'D:\Source\Perception\Release\zlib.pdb'; linking object as if no debug info
+zlib.lib(inflate.obj) : warning LNK4099: PDB 'zlib.pdb' was not found with 'zlib.lib(inflate.obj)' or at 'D:\Source\Perception\Release\zlib.pdb'; linking object as if no debug info
+zlib.lib(inftrees.obj) : warning LNK4099: PDB 'zlib.pdb' was not found with 'zlib.lib(inftrees.obj)' or at 'D:\Source\Perception\Release\zlib.pdb'; linking object as if no debug info
+zlib.lib(inffast.obj) : warning LNK4099: PDB 'zlib.pdb' was not found with 'zlib.lib(inffast.obj)' or at 'D:\Source\Perception\Release\zlib.pdb'; linking object as if no debug info
+zlib.lib(zutil.obj) : warning LNK4099: PDB 'zlib.pdb' was not found with 'zlib.lib(zutil.obj)' or at 'D:\Source\Perception\Release\zlib.pdb'; linking object as if no debug info
+  Perception.vcxproj -> D:\Source\Perception\Release\Perception.exe

@@ -53,6 +53,7 @@ public:
 			}
 			out.resize(strm.total_out);
 			(void)inflateEnd(&strm);
+			std::cout << ret << std::endl;
 			if (ret != Z_STREAM_END)	throw ret == Z_OK ? Z_DATA_ERROR : ret;
 		}
 		catch (int ret)

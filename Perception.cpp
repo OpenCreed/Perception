@@ -75,7 +75,7 @@ DataSegment::Data::Data(SegmentType type)
 	case SegmentType::Shape_LOD8:
 	case SegmentType::Shape_LOD9:
 		fp->readTo(logicalElementHeader);
-		std::cout << +logicalElementHeader.elementHeader.objectBaseType << std::endl;
+		//std::cout << +logicalElementHeader.elementHeader.objectBaseType << std::endl;
 		break;
 	default:
 		std::cout << "Invaild Segment Type" << std::endl;
