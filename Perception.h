@@ -11,8 +11,6 @@ struct FileHeader
 	int32_t emptyField;
 	int32_t tocOffset;
 	char lsgSegmentID[16]; // GUID
-
-	FileHeader();
 };
 
 struct TOCSegment

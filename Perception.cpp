@@ -5,12 +5,12 @@
 #include "FileProcessor.hpp"
 
 std::unique_ptr<FileProcessor> fp;
-std::unique_ptr<FileHeader> fileHeader;
+FileHeader fileHeader;
 
 int main()
 {
 	fp = std::make_unique<FileProcessor>("C:/Users/JBC/3D Objects/floorjack.jt");
-	fileHeader = std::make_unique<FileHeader>();
+	fp->readTo(fileHeader);
 	TOCSegment TOC_Segment = TOCSegment();
 	std::vector<DataSegment> Data_Segment;
 	for (auto entry = TOC_Segment.tocEntry.cbegin(); entry != TOC_Segment.tocEntry.cend(); entry++)
@@ -19,14 +19,9 @@ int main()
 	}
 }
 
-FileHeader::FileHeader()
-{
-	fp->readTo(*this);
-}
-
 TOCSegment::TOCSegment()
 {
-	fp->readTo(entryCount, fileHeader->tocOffset);
+	fp->readTo(entryCount, fileHeader.tocOffset);
 
 	for (int i = 0; i < entryCount; i++)
 	{
