@@ -174,7 +174,7 @@
   <ItemGroup>
     <ClInclude Include="PCH.h" />
     <ClInclude Include="Perception.h" />
-    <ClInclude Include="enum.hpp" />
+    <ClInclude Include="enums.hpp" />
     <ClInclude Include="FileProcessor.hpp" />
     <ClInclude Include="ZLibCustom.h" />
   </ItemGroup>

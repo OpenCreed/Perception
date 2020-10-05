@@ -2,7 +2,7 @@
 #pragma pack(push, 1)
 
 #include "PCH.h"
-#include "enum.hpp"
+#include "enums.hpp"
 
 struct GUID
 {
@@ -26,7 +26,7 @@ struct GUID
 
 struct FileHeader
 {
-	char version[80];
+	char version[80]; //Version of the file format used
 	char byteOrder;
 	int32_t emptyField;
 	int32_t tocOffset;

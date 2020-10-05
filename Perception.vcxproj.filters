@@ -29,13 +29,13 @@
     <ClInclude Include="Perception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="enum.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FileProcessor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ZLibCustom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enums.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
